@@ -9,7 +9,7 @@
 <h2>پیش‌نیازها</h2>
 <ul>
   <li><span dir="ltr">Java 21</span></li>
-  <li><span dir="ltr">Spring Boot 4.0.1</span></li>
+  <li><span dir="ltr">Spring Boot 3.5.7</span></li>
 </ul>
 
 <h2>نصب بدون انتشار در <span dir="ltr">Maven Central</span></h2>
@@ -24,7 +24,7 @@
 <pre dir="ltr"><code dir="ltr" class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;com.ernoxin&lt;/groupId&gt;
   &lt;artifactId&gt;ZarinPal-java-SDK&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0&lt;/version&gt;
+  &lt;version&gt;1.0.1&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 </div>
