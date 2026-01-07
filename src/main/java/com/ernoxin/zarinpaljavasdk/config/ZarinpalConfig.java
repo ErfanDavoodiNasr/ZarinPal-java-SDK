@@ -19,7 +19,10 @@ public record ZarinpalConfig(
         boolean retryEnabled,
         int retryMaxAttempts,
         Duration retryBackoff,
-        String userAgent
+        String userAgent,
+        long maxAmountIrt,
+        long maxAmountIrr,
+        long minWageAmount
 ) {
     public static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(10);
     public static final Duration DEFAULT_READ_TIMEOUT = Duration.ofSeconds(30);
@@ -30,6 +33,9 @@ public record ZarinpalConfig(
     public static final int DEFAULT_RETRY_MAX_ATTEMPTS = 1;
     public static final Duration DEFAULT_RETRY_BACKOFF = Duration.ZERO;
     public static final String DEFAULT_USER_AGENT = "ZarinpalJavaSdk";
+    public static final long DEFAULT_MAX_AMOUNT_IRT = 100_000_000L;
+    public static final long DEFAULT_MAX_AMOUNT_IRR = 1_000_000_000L;
+    public static final long DEFAULT_MIN_WAGE_AMOUNT = 10_000L;
 
     public ZarinpalConfig {
         if (merchantId == null || merchantId.isBlank()) {
@@ -85,6 +91,15 @@ public record ZarinpalConfig(
             userAgent = DEFAULT_USER_AGENT;
         }
         userAgent = userAgent.trim();
+        if (maxAmountIrt <= 0) {
+            throw new ZarinpalValidationException("maxAmountIrt must be positive");
+        }
+        if (maxAmountIrr <= 0) {
+            throw new ZarinpalValidationException("maxAmountIrr must be positive");
+        }
+        if (minWageAmount <= 0) {
+            throw new ZarinpalValidationException("minWageAmount must be positive");
+        }
     }
 
     private static String normalizeOperationVersion(String operationVersion) {
@@ -127,6 +142,9 @@ public record ZarinpalConfig(
         private int retryMaxAttempts = DEFAULT_RETRY_MAX_ATTEMPTS;
         private Duration retryBackoff = DEFAULT_RETRY_BACKOFF;
         private String userAgent = DEFAULT_USER_AGENT;
+        private long maxAmountIrt = DEFAULT_MAX_AMOUNT_IRT;
+        private long maxAmountIrr = DEFAULT_MAX_AMOUNT_IRR;
+        private long minWageAmount = DEFAULT_MIN_WAGE_AMOUNT;
 
         public Builder(String merchantId) {
             this.merchantId = merchantId;
@@ -187,6 +205,21 @@ public record ZarinpalConfig(
             return this;
         }
 
+        public Builder maxAmountIrt(long maxAmountIrt) {
+            this.maxAmountIrt = maxAmountIrt;
+            return this;
+        }
+
+        public Builder maxAmountIrr(long maxAmountIrr) {
+            this.maxAmountIrr = maxAmountIrr;
+            return this;
+        }
+
+        public Builder minWageAmount(long minWageAmount) {
+            this.minWageAmount = minWageAmount;
+            return this;
+        }
+
         public ZarinpalConfig build() {
             return new ZarinpalConfig(
                     merchantId,
@@ -200,7 +233,10 @@ public record ZarinpalConfig(
                     retryEnabled,
                     retryMaxAttempts,
                     retryBackoff,
-                    userAgent
+                    userAgent,
+                    maxAmountIrt,
+                    maxAmountIrr,
+                    minWageAmount
             );
         }
     }

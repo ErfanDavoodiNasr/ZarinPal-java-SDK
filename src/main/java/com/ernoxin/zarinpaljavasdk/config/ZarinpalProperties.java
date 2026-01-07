@@ -19,6 +19,9 @@ public class ZarinpalProperties {
     private Timeout timeout = new Timeout();
     private Retry retry = new Retry();
     private Http http = new Http();
+    private long maxAmountIrt = ZarinpalConfig.DEFAULT_MAX_AMOUNT_IRT;
+    private long maxAmountIrr = ZarinpalConfig.DEFAULT_MAX_AMOUNT_IRR;
+    private long minWageAmount = ZarinpalConfig.DEFAULT_MIN_WAGE_AMOUNT;
 
     public ZarinpalConfig toConfig() {
         BaseUrl baseUrlValue = baseUrl != null ? baseUrl : new BaseUrl();
@@ -37,7 +40,10 @@ public class ZarinpalProperties {
                 retryValue.isEnabled(),
                 retryValue.getMaxAttempts(),
                 retryValue.getBackoff(),
-                httpValue.getUserAgent()
+                httpValue.getUserAgent(),
+                maxAmountIrt,
+                maxAmountIrr,
+                minWageAmount
         );
     }
 

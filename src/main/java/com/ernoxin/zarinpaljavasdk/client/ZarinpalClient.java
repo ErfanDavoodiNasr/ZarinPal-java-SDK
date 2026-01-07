@@ -137,6 +137,10 @@ public final class ZarinpalClient {
 
     private void validatePaymentRequest(PaymentRequest request) {
         ZarinpalValidation.requirePositive(request.amount(), "amount");
+        long maxAmount = request.currency() == ZarinpalCurrency.IRT ? config.maxAmountIrt() : config.maxAmountIrr();
+        if (request.amount() > maxAmount) {
+            throw new ZarinpalValidationException("amount must be at most " + maxAmount);
+        }
         ZarinpalValidation.requireNonBlank(request.description(), "description");
         ZarinpalValidation.requireMaxLength(request.description(), 500, "description");
         URI callbackUrl = request.callbackUrl() != null ? request.callbackUrl() : config.callbackUrl();
@@ -234,6 +238,9 @@ public final class ZarinpalClient {
             }
             ZarinpalValidation.requireIban(wage.iban());
             ZarinpalValidation.requirePositive(wage.amount(), "wages.amount");
+            if (wage.amount() < config.minWageAmount()) {
+                throw new ZarinpalValidationException("wages.amount must be at least " + config.minWageAmount());
+            }
             ZarinpalValidation.requireNonBlank(wage.description(), "wages.description");
             try {
                 total = Math.addExact(total, wage.amount());

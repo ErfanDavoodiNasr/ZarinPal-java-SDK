@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 @UtilityClass
 public class ZarinpalValidation {
-    private static final Pattern AUTHORITY_PATTERN = Pattern.compile("^[AS][A-Za-z0-9]+$");
+    private static final Pattern AUTHORITY_PATTERN = Pattern.compile("^[AS][A-Za-z0-9]{35}$");
     private static final Pattern IBAN_PATTERN = Pattern.compile("^IR\\d{24}$");
     private static final Pattern CARD_PAN_PATTERN = Pattern.compile("^[0-9Xx]{16}$");
 
@@ -64,7 +64,7 @@ public class ZarinpalValidation {
         requireNonBlank(authority, "authority");
         String trimmed = authority.trim();
         if (!AUTHORITY_PATTERN.matcher(trimmed).matches()) {
-            throw new ZarinpalValidationException("authority must start with A or S and contain only letters and digits");
+            throw new ZarinpalValidationException("authority must start with A or S and be 36 characters long");
         }
     }
 
