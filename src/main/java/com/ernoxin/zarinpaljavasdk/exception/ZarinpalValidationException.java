@@ -19,7 +19,7 @@ public class ZarinpalValidationException extends ZarinpalException {
      * Creates a validation exception with cause.
      *
      * @param message validation error detail
-     * @param cause root cause
+     * @param cause   root cause
      */
     public ZarinpalValidationException(String message, Throwable cause) {
         super(message, cause);

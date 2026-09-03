@@ -7,9 +7,13 @@ import java.net.URI;
  *
  */
 public enum ZarinpalEnvironment {
-    /** Production gateway endpoints. */
+    /**
+     * Production gateway endpoints.
+     */
     PRODUCTION("https://payment.zarinpal.com"),
-    /** Sandbox gateway endpoints for testing. */
+    /**
+     * Sandbox gateway endpoints for testing.
+     */
     SANDBOX("https://sandbox.zarinpal.com");
 
     private final URI baseUrl;

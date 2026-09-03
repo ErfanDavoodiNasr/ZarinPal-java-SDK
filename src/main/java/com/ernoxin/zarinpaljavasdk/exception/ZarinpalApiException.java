@@ -18,10 +18,10 @@ public class ZarinpalApiException extends ZarinpalException {
     /**
      * Creates an API exception.
      *
-     * @param httpStatus HTTP response status code
-     * @param gatewayCode gateway-level code extracted from response, if available
+     * @param httpStatus     HTTP response status code
+     * @param gatewayCode    gateway-level code extracted from response, if available
      * @param gatewayMessage gateway-level message or resolved catalog message
-     * @param rawBody raw response body for diagnostics
+     * @param rawBody        raw response body for diagnostics
      */
     public ZarinpalApiException(int httpStatus, Integer gatewayCode, String gatewayMessage, String rawBody) {
         super(buildMessage(httpStatus, gatewayCode, gatewayMessage));
@@ -34,11 +34,11 @@ public class ZarinpalApiException extends ZarinpalException {
     /**
      * Creates an API exception with cause.
      *
-     * @param httpStatus HTTP response status code
-     * @param gatewayCode gateway-level code extracted from response, if available
+     * @param httpStatus     HTTP response status code
+     * @param gatewayCode    gateway-level code extracted from response, if available
      * @param gatewayMessage gateway-level message or resolved catalog message
-     * @param rawBody raw response body for diagnostics
-     * @param cause root cause (for example JSON parsing failure)
+     * @param rawBody        raw response body for diagnostics
+     * @param cause          root cause (for example JSON parsing failure)
      */
     public ZarinpalApiException(int httpStatus, Integer gatewayCode, String gatewayMessage, String rawBody, Throwable cause) {
         super(buildMessage(httpStatus, gatewayCode, gatewayMessage), cause);

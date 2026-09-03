@@ -9,14 +9,14 @@ import java.util.List;
  * <p>Amounts are interpreted by {@link #currency()}:
  * {@link ZarinpalCurrency#IRR} for rial or {@link ZarinpalCurrency#IRT} for toman.
  *
- * @param amount payment amount (must be positive and within configured max)
+ * @param amount      payment amount (must be positive and within configured max)
  * @param description payment description (required, max 500 chars)
  * @param callbackUrl optional request-level callback URL; falls back to config callback URL
- * @param currency optional currency unit; when {@code null}, gateway default behavior applies
- * @param referrerId optional referrer code (non-blank when provided)
- * @param metadata optional request metadata
- * @param cartData optional cart data
- * @param wages optional split wages list, max 5 items when provided
+ * @param currency    optional currency unit; when {@code null}, gateway default behavior applies
+ * @param referrerId  optional referrer code (non-blank when provided)
+ * @param metadata    optional request metadata
+ * @param cartData    optional cart data
+ * @param wages       optional split wages list, max 5 items when provided
  */
 public record PaymentRequest(
         long amount,
@@ -32,7 +32,7 @@ public record PaymentRequest(
     /**
      * Creates a builder with mandatory fields.
      *
-     * @param amount payment amount
+     * @param amount      payment amount
      * @param description payment description
      * @return mutable builder
      */

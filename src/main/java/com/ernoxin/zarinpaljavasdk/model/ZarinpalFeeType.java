@@ -10,9 +10,13 @@ import java.util.Locale;
  *
  */
 public enum ZarinpalFeeType {
-    /** Merchant pays fee. */
+    /**
+     * Merchant pays fee.
+     */
     MERCHANT("Merchant"),
-    /** Payer/customer pays fee. */
+    /**
+     * Payer/customer pays fee.
+     */
     PAYER("Payer");
 
     private final String value;

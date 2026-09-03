@@ -4,7 +4,8 @@
 
 ## معرفی
 
-این کتابخانه یک <span dir="ltr">SDK</span> سبک برای اتصال به درگاه پرداخت زرین‌پال در پروژه‌های <span dir="ltr">Spring Boot 3.5.7</span> است. هدف آن ساده‌سازی پرداخت، اعتبارسنجی زودهنگام و دریافت پاسخ‌های تایپ‌شده است.
+این کتابخانه یک <span dir="ltr">SDK</span> سبک برای اتصال به درگاه پرداخت زرین‌پال در پروژه‌های <span dir="ltr">Spring
+Boot 3.5.7</span> است. هدف آن ساده‌سازی پرداخت، اعتبارسنجی زودهنگام و دریافت پاسخ‌های تایپ‌شده است.
 
 این پروژه یک کتابخانه است و برنامه اجرایی ندارد؛ آن را در پروژه خود استفاده می‌کنید تا روی منطق کسب‌وکار تمرکز کنید.
 
@@ -36,10 +37,11 @@ mvn clean install
 <div dir="ltr" align="left">
 
 ```xml
+
 <dependency>
-  <groupId>com.ernoxin</groupId>
-  <artifactId>zarinpal-java-sdk</artifactId>
-  <version>1.1.1</version>
+    <groupId>com.ernoxin</groupId>
+    <artifactId>zarinpal-java-sdk</artifactId>
+    <version>1.2.1</version>
 </dependency>
 ```
 
@@ -49,12 +51,14 @@ mvn clean install
 
 ## پیکربندی
 
-پیکربندی به‌صورت <span dir="ltr">fail-fast</span> انجام می‌شود: اگر مقدارهای اجباری ناقص باشند، برنامه در زمان بالا آمدن متوقف می‌شود تا خطا به مرحله پرداخت نرسد.
+پیکربندی به‌صورت <span dir="ltr">fail-fast</span> انجام می‌شود: اگر مقدارهای اجباری ناقص باشند، برنامه در زمان بالا آمدن
+متوقف می‌شود تا خطا به مرحله پرداخت نرسد.
 
 ### کلیدهای <span dir="ltr">application.properties</span>
 
 | کلید                                                  | الزامی | پیش‌فرض                                               | توضیح                                                                                           |
-| ----------------------------------------------------- | -----: | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+|-------------------------------------------------------|-------:|-------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| <span dir="ltr">`zarinpal.enabled`</span>             |    بله | <span dir="ltr">`false`</span>                        | برای ساخت beanهای Spring باید <span dir="ltr">`true`</span> باشد                                |
 | <span dir="ltr">`zarinpal.merchant-id`</span>         |    بله | -                                                     | شناسه پذیرنده به‌صورت <span dir="ltr">UUID</span> با طول ۳۶ کاراکتر                             |
 | <span dir="ltr">`zarinpal.callback-url`</span>        |    بله | -                                                     | آدرس بازگشت پس از پرداخت، باید <span dir="ltr">http</span> یا <span dir="ltr">https</span> باشد |
 | <span dir="ltr">`zarinpal.environment`</span>         |    خیر | <span dir="ltr">`PRODUCTION`</span>                   | محیط اجرا: <span dir="ltr">`PRODUCTION`</span> یا <span dir="ltr">`SANDBOX`</span>              |
@@ -71,17 +75,24 @@ mvn clean install
 | <span dir="ltr">`zarinpal.max-amount-irr`</span>      |    خیر | <span dir="ltr">`1000000000`</span>                   | سقف مبلغ برای پرداخت با ریال (<span dir="ltr">IRR</span>)                                       |
 | <span dir="ltr">`zarinpal.min-wage-amount`</span>     |    خیر | <span dir="ltr">`10000`</span>                        | حداقل مبلغ هر تسهیم در تسویه اشتراکی (ریال)                                                     |
 
-محدودیت‌های مبلغ و تسهیم (مثل <span dir="ltr">`zarinpal.max-amount-irt`</span>، <span dir="ltr">`zarinpal.max-amount-irr`</span> و <span dir="ltr">`zarinpal.min-wage-amount`</span>) توسط <span dir="ltr">SDK</span> برای اعتبارسنجی استفاده می‌شوند و درگاه نیز محدودیت‌های خودش را اعمال می‌کند؛ در صورت تغییر این مقادیر، فقط تنظیمات را به‌روزرسانی کنید و نیازی به تغییر کد نیست.
+محدودیت‌های مبلغ و تسهیم (مثل <span dir="ltr">`zarinpal.max-amount-irt`</span>، <span dir="ltr">
+`zarinpal.max-amount-irr`</span> و <span dir="ltr">`zarinpal.min-wage-amount`</span>) توسط <span dir="ltr">SDK</span>
+برای اعتبارسنجی استفاده می‌شوند و درگاه نیز محدودیت‌های خودش را اعمال می‌کند؛ در صورت تغییر این مقادیر، فقط تنظیمات را
+به‌روزرسانی کنید و نیازی به تغییر کد نیست.
 
 ### <span dir="ltr">timeout</span> و <span dir="ltr">retry</span>
 
 * <span dir="ltr">`zarinpal.timeout.connect`</span> زمان برقراری اتصال است و شامل <span dir="ltr">TCP/SSL</span> می‌شود.
 * <span dir="ltr">`zarinpal.timeout.read`</span> زمان انتظار برای دریافت پاسخ پس از اتصال است.
-* <span dir="ltr">retry</span> فقط روی خطاهای شبکه/ارتباطی فعال می‌شود و روی خطاهای منطقی درگاه یا کدهای پاسخ اجرا نمی‌شود.
-* <span dir="ltr">`max-attempts`</span> تعداد کل تلاش‌ها و <span dir="ltr">`backoff`</span> فاصله بین تلاش‌ها را مشخص می‌کند.
-* **هشدار:** فعال کردن <span dir="ltr">retry</span> برای <span dir="ltr">requestPayment</span> ممکن است باعث ایجاد چند <span dir="ltr">authority</span> شود اگر درخواست اول در درگاه ثبت شده ولی پاسخ آن به شما نرسیده باشد.
+* <span dir="ltr">retry</span> فقط روی خطاهای شبکه/ارتباطی فعال می‌شود و روی خطاهای منطقی درگاه یا کدهای پاسخ اجرا
+  نمی‌شود.
+* <span dir="ltr">`max-attempts`</span> تعداد کل تلاش‌ها و <span dir="ltr">`backoff`</span> فاصله بین تلاش‌ها را مشخص
+  می‌کند.
+* **هشدار:** فعال کردن <span dir="ltr">retry</span> برای <span dir="ltr">requestPayment</span> ممکن است باعث ایجاد
+  چند <span dir="ltr">authority</span> شود اگر درخواست اول در درگاه ثبت شده ولی پاسخ آن به شما نرسیده باشد.
 
-فرمت مدت‌زمان‌ها می‌تواند به صورت <span dir="ltr">`500ms`</span>، <span dir="ltr">`2s`</span> یا <span dir="ltr">`1m`</span> باشد.
+فرمت مدت‌زمان‌ها می‌تواند به صورت <span dir="ltr">`500ms`</span>، <span dir="ltr">`2s`</span> یا <span dir="ltr">
+`1m`</span> باشد.
 
 ### نمونه تنظیمات
 
@@ -90,6 +101,7 @@ mvn clean install
 <div dir="ltr" align="left">
 
 ```properties
+zarinpal.enabled=true
 zarinpal.merchant-id=11111111-1111-1111-1111-111111111111
 zarinpal.callback-url=https://example.com/payment/callback
 ```
@@ -101,6 +113,7 @@ zarinpal.callback-url=https://example.com/payment/callback
 <div dir="ltr" align="left">
 
 ```properties
+zarinpal.enabled=true
 zarinpal.merchant-id=11111111-1111-1111-1111-111111111111
 zarinpal.callback-url=https://example.com/payment/callback
 zarinpal.environment=SANDBOX
@@ -141,9 +154,11 @@ public class PaymentService {
 
 ### گام ۲: ساخت درخواست پرداخت
 
-حداقل ورودی لازم شامل مبلغ و توضیح است. اگر <span dir="ltr">callback-url</span> در تنظیمات تعریف شده باشد، ارسال آن در هر درخواست ضروری نیست.
+حداقل ورودی لازم شامل مبلغ و توضیح است. اگر <span dir="ltr">callback-url</span> در تنظیمات تعریف شده باشد، ارسال آن در
+هر درخواست ضروری نیست.
 
-اگر برای یک تراکنش خاص آدرس بازگشت متفاوتی دارید، مقدار <span dir="ltr">callbackUrl</span> را در همان درخواست تنظیم کنید.
+اگر برای یک تراکنش خاص آدرس بازگشت متفاوتی دارید، مقدار <span dir="ltr">callbackUrl</span> را در همان درخواست تنظیم
+کنید.
 
 <div dir="ltr" align="left">
 
@@ -178,7 +193,8 @@ String redirectUrl = client.buildRedirectUrl(result.authority());
 
 ### گام ۴: بازگشت و وریفای پرداخت
 
-فقط وقتی <span dir="ltr">Status</span> برابر <span dir="ltr">OK</span> است باید وریفای انجام شود و مقدار <span dir="ltr">amount</span> باید همان مبلغ تراکنش باشد.
+فقط وقتی <span dir="ltr">Status</span> برابر <span dir="ltr">OK</span> است باید وریفای انجام شود و
+مقدار <span dir="ltr">amount</span> باید همان مبلغ تراکنش باشد.
 
 <div dir="ltr" align="left">
 
@@ -195,18 +211,25 @@ public VerifyResult handleCallback(ZarinpalClient client, Map<String, String> pa
 
 </div>
 
-<span dir="ltr">parseCallback</span> کلیدهای <span dir="ltr">Authority</span> و <span dir="ltr">Status</span> را به‌صورت <span dir="ltr">case-insensitive</span> می‌خواند؛ اگر هرکدام ارسال نشده باشند یا مقدار معتبر نداشته باشند، <span dir="ltr">ZarinpalCallbackException</span> دریافت می‌کنید. ورودی می‌تواند از نوع <span dir="ltr">Map</span> یا <span dir="ltr">MultiValueMap</span> باشد.
+<span dir="ltr">parseCallback</span> کلیدهای <span dir="ltr">Authority</span> و <span dir="ltr">Status</span> را
+به‌صورت <span dir="ltr">case-insensitive</span> می‌خواند؛ اگر هرکدام ارسال نشده باشند یا مقدار معتبر نداشته
+باشند، <span dir="ltr">ZarinpalCallbackException</span> دریافت می‌کنید. ورودی می‌تواند از نوع <span dir="ltr">Map</span>
+یا <span dir="ltr">MultiValueMap</span> باشد.
+
+**امنیت:** <span dir="ltr">parseCallback</span> فقط پارامترها را می‌خواند و اصالت پرداخت را ثابت نمی‌کند. برای callback
+موفق حتماً <span dir="ltr">verifyPayment</span> را صدا بزنید و مبلغ/شناسه سفارش را با دادهٔ داخلی خودتان تطبیق دهید.
 
 ---
 
 ## مدل‌ها و اعتبارسنجی
 
-همه متدها <span dir="ltr">merchant_id</span> را از تنظیمات می‌خوانند و در ورودی‌ها دریافت نمی‌کنند. در صورت نامعتبر بودن داده‌ها، خطای <span dir="ltr">ZarinpalValidationException</span> قبل از ارسال درخواست رخ می‌دهد.
+همه متدها <span dir="ltr">merchant_id</span> را از تنظیمات می‌خوانند و در ورودی‌ها دریافت نمی‌کنند. در صورت نامعتبر بودن
+داده‌ها، خطای <span dir="ltr">ZarinpalValidationException</span> قبل از ارسال درخواست رخ می‌دهد.
 
 ### <span dir="ltr">PaymentRequest</span>
 
 | فیلد (SDK)                           | نوع                                      |           الزامی | توضیح                                                                                                                          |
-| ------------------------------------ | ---------------------------------------- | ---------------: | ------------------------------------------------------------------------------------------------------------------------------ |
+|--------------------------------------|------------------------------------------|-----------------:|--------------------------------------------------------------------------------------------------------------------------------|
 | <span dir="ltr">`amount`</span>      | <span dir="ltr">long</span>              |              بله | مبلغ تراکنش؛ باید مثبت باشد. سقف مبلغ بر اساس واحد پولی از تنظیمات خوانده می‌شود.                                              |
 | <span dir="ltr">`description`</span> | <span dir="ltr">String</span>            |              بله | الزامی و حداکثر ۵۰۰ کاراکتر.                                                                                                   |
 | <span dir="ltr">`callbackUrl`</span> | <span dir="ltr">URI</span>               | خیر (در درخواست) | اگر مقدار ندهید از <span dir="ltr">`zarinpal.callback-url`</span> استفاده می‌شود؛ باید <span dir="ltr">http/https</span> باشد. |
@@ -216,12 +239,14 @@ public VerifyResult handleCallback(ZarinpalClient client, Map<String, String> pa
 | <span dir="ltr">`cartData`</span>    | <span dir="ltr">CartData</span>          |              خیر | جزئیات سبد خرید؛ در صورت ارسال، <span dir="ltr">`items`</span> باید وجود داشته باشد.                                           |
 | <span dir="ltr">`wages`</span>       | <span dir="ltr">List<PaymentWage></span> |              خیر | تسویه اشتراکی بین شرکا.                                                                                                        |
 
-نام فیلدها در خروجی <span dir="ltr">JSON</span> به صورت <span dir="ltr">snake_case</span> ارسال می‌شود و مقادیر <span dir="ltr">null</span> حذف می‌شوند؛ بنابراین هر فیلدی را مقداردهی نکنید به درگاه ارسال نخواهد شد (مثلا <span dir="ltr">`callbackUrl`</span> به <span dir="ltr">`callback_url`</span> تبدیل می‌شود).
+نام فیلدها در خروجی <span dir="ltr">JSON</span> به صورت <span dir="ltr">snake_case</span> ارسال می‌شود و
+مقادیر <span dir="ltr">null</span> حذف می‌شوند؛ بنابراین هر فیلدی را مقداردهی نکنید به درگاه ارسال نخواهد شد (
+مثلا <span dir="ltr">`callbackUrl`</span> به <span dir="ltr">`callback_url`</span> تبدیل می‌شود).
 
 ### <span dir="ltr">PaymentMetadata</span>
 
 | فیلد (SDK)                          | نوع                            | الزامی | توضیح                                                                                                                                                                                     |
-| ----------------------------------- | ------------------------------ | -----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-------------------------------------|--------------------------------|-------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | <span dir="ltr">`mobile`</span>     | <span dir="ltr">String</span>  |    خیر | شماره موبایل خریدار؛ در صورت ارسال نباید خالی باشد.                                                                                                                                       |
 | <span dir="ltr">`email`</span>      | <span dir="ltr">String</span>  |    خیر | ایمیل خریدار؛ در صورت ارسال نباید خالی باشد.                                                                                                                                              |
 | <span dir="ltr">`orderId`</span>    | <span dir="ltr">String</span>  |    خیر | شناسه سفارش؛ در صورت ارسال نباید خالی باشد.                                                                                                                                               |
@@ -230,12 +255,14 @@ public VerifyResult handleCallback(ZarinpalClient client, Map<String, String> pa
 
 ### <span dir="ltr">CartData</span>
 
-اگر <span dir="ltr">cart_data</span> ارسال شود، آرایه <span dir="ltr">items</span> الزامی است و نباید خالی باشد. <span dir="ltr">SDK</span> جمع کل سبد خرید را با <span dir="ltr">amount</span> تطبیق نمی‌دهد و فقط ساختار و قوانین هر آیتم را بررسی می‌کند.
+اگر <span dir="ltr">cart_data</span> ارسال شود، آرایه <span dir="ltr">items</span> الزامی است و نباید خالی
+باشد. <span dir="ltr">SDK</span> جمع کل سبد خرید را با <span dir="ltr">amount</span> تطبیق نمی‌دهد و فقط ساختار و قوانین
+هر آیتم را بررسی می‌کند.
 
 #### آیتم‌ها (<span dir="ltr">items</span>)
 
 | فیلد (SDK)                             | نوع                           | الزامی | توضیح                                                                                      |
-| -------------------------------------- | ----------------------------- | -----: | ------------------------------------------------------------------------------------------ |
+|----------------------------------------|-------------------------------|-------:|--------------------------------------------------------------------------------------------|
 | <span dir="ltr">`itemName`</span>      | <span dir="ltr">String</span> |    بله | نام محصول یا خدمت؛ نباید خالی باشد.                                                        |
 | <span dir="ltr">`itemAmount`</span>    | <span dir="ltr">long</span>   |    بله | مبلغ هر واحد؛ باید مثبت باشد.                                                              |
 | <span dir="ltr">`itemCount`</span>     | <span dir="ltr">long</span>   |    بله | تعداد واحدها؛ باید مثبت باشد.                                                              |
@@ -244,7 +271,7 @@ public VerifyResult handleCallback(ZarinpalClient client, Map<String, String> pa
 #### هزینه‌های اضافی (<span dir="ltr">added_costs</span>)
 
 | فیلد (SDK)                         | نوع                         | الزامی | توضیح                                                    |
-| ---------------------------------- | --------------------------- | -----: | -------------------------------------------------------- |
+|------------------------------------|-----------------------------|-------:|----------------------------------------------------------|
 | <span dir="ltr">`tax`</span>       | <span dir="ltr">Long</span> |    خیر | مالیات سبد خرید؛ در صورت ارسال باید غیرمنفی باشد.        |
 | <span dir="ltr">`payment`</span>   | <span dir="ltr">Long</span> |    خیر | کارمزد یا هزینه پرداخت؛ در صورت ارسال باید غیرمنفی باشد. |
 | <span dir="ltr">`transport`</span> | <span dir="ltr">Long</span> |    خیر | هزینه حمل یا ارسال؛ در صورت ارسال باید غیرمنفی باشد.     |
@@ -252,18 +279,19 @@ public VerifyResult handleCallback(ZarinpalClient client, Map<String, String> pa
 #### کسرها (<span dir="ltr">deductions</span>)
 
 | فیلد (SDK)                        | نوع                         | الزامی | توضیح                                        |
-| --------------------------------- | --------------------------- | -----: | -------------------------------------------- |
+|-----------------------------------|-----------------------------|-------:|----------------------------------------------|
 | <span dir="ltr">`discount`</span> | <span dir="ltr">Long</span> |    خیر | مبلغ تخفیف؛ در صورت ارسال باید غیرمنفی باشد. |
 
 ### <span dir="ltr">PaymentWage</span> (تسویه اشتراکی)
 
 | فیلد (SDK)                           | نوع                           | الزامی | توضیح                                                                                                        |
-| ------------------------------------ | ----------------------------- | -----: | ------------------------------------------------------------------------------------------------------------ |
+|--------------------------------------|-------------------------------|-------:|--------------------------------------------------------------------------------------------------------------|
 | <span dir="ltr">`iban`</span>        | <span dir="ltr">String</span> |    بله | شماره شبا ۲۶ کاراکتری که با <span dir="ltr">IR</span> شروع می‌شود.                                           |
 | <span dir="ltr">`amount`</span>      | <span dir="ltr">long</span>   |    بله | مبلغ تسهیم؛ باید مثبت باشد و حداقل مقدار از <span dir="ltr">`zarinpal.min-wage-amount`</span> خوانده می‌شود. |
 | <span dir="ltr">`description`</span> | <span dir="ltr">String</span> |    بله | توضیح تسهیم؛ نباید خالی باشد.                                                                                |
 
-قوانین تسویه اشتراکی: اگر <span dir="ltr">wages</span> ارسال شود نباید خالی باشد، حداکثر ۵ آیتم مجاز است، مجموع تسهیم حداکثر ۹۹٪ مبلغ کل است و هر آیتم باید شماره شبا و مقدار معتبر داشته باشد.
+قوانین تسویه اشتراکی: اگر <span dir="ltr">wages</span> ارسال شود نباید خالی باشد، حداکثر ۵ آیتم مجاز است، مجموع تسهیم
+حداکثر ۹۹٪ مبلغ کل است و هر آیتم باید شماره شبا و مقدار معتبر داشته باشد.
 
 ---
 
@@ -435,7 +463,7 @@ PaymentRequestResult result = client.requestPayment(request);
 ## تمام متدهای کلاینت
 
 | متد                                         | ورودی                                                              | خروجی                                       | نکته مهم                                                                               |
-| ------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------- | -------------------------------------------------------------------------------------- |
+|---------------------------------------------|--------------------------------------------------------------------|---------------------------------------------|----------------------------------------------------------------------------------------|
 | <span dir="ltr">`requestPayment`</span>     | <span dir="ltr">PaymentRequest</span>                              | <span dir="ltr">PaymentRequestResult</span> | ایجاد تراکنش و دریافت <span dir="ltr">authority</span>                                 |
 | <span dir="ltr">`buildRedirectUrl`</span>   | <span dir="ltr">authority</span>                                   | <span dir="ltr">String</span>               | آدرس نهایی از دامنه محیط و مسیر <span dir="ltr">`/pg/StartPay/`</span> ساخته می‌شود    |
 | <span dir="ltr">`parseCallback`</span>      | <span dir="ltr">Map</span> یا <span dir="ltr">MultiValueMap</span> | <span dir="ltr">ZarinpalCallback</span>     | خروجی فقط شامل <span dir="ltr">authority</span> و <span dir="ltr">status</span> است    |
@@ -459,9 +487,8 @@ PaymentRequestResult result = client.requestPayment(request);
 
 ### لیست کدهای درگاه
 
-
 | حوزه                                  |                         کد | پیام انگلیسی                                                                                              | شرح فارسی                                                |
-| ------------------------------------- | -------------------------: | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+|---------------------------------------|---------------------------:|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------|
 | <span dir="ltr">PaymentReverse</span> | <span dir="ltr">-63</span> | <span dir="ltr">Maximum time for reverse this session is expired.</span>                                  | بازه ۳۰ دقیقه‌ای ریورس منقضی شده است                     |
 | <span dir="ltr">PaymentReverse</span> | <span dir="ltr">-62</span> | <span dir="ltr">Terminal ip limit most be active.</span>                                                  | آی‌پی سرور در پنل ثبت نشده است                           |
 | <span dir="ltr">PaymentReverse</span> | <span dir="ltr">-61</span> | <span dir="ltr">Session is not in success status.</span>                                                  | تراکنش موفق نیست یا قبلا ریورس شده است                   |
@@ -505,21 +532,26 @@ PaymentRequestResult result = client.requestPayment(request);
 
 ### <span dir="ltr">Exception</span>های <span dir="ltr">SDK</span>
 
-* <span dir="ltr">`ZarinpalValidationException`</span>: ورودی با قوانین معتبر نیست و قبل از ارسال به درگاه خطا گرفته می‌شود
+* <span dir="ltr">`ZarinpalValidationException`</span>: ورودی با قوانین معتبر نیست و قبل از ارسال به درگاه خطا گرفته
+  می‌شود
 * <span dir="ltr">`ZarinpalApiException`</span>: درگاه پاسخ خطا داده است و شامل کد و پیام درگاه است
 * <span dir="ltr">`ZarinpalTransportException`</span>: خطای شبکه یا تایم‌اوت در ارتباط با درگاه
 * <span dir="ltr">`ZarinpalCallbackException`</span>: پارامترهای بازگشتی ناقص یا نامعتبر هستند
 
-برای خطایابی شبکه، ابتدا <span dir="ltr">base-url</span>ها را بررسی کنید، زمان‌های <span dir="ltr">timeout</span> را افزایش دهید و در محیط <span dir="ltr">SANDBOX</span> تست کنید.
+برای خطایابی شبکه، ابتدا <span dir="ltr">base-url</span>ها را بررسی کنید، زمان‌های <span dir="ltr">timeout</span> را
+افزایش دهید و در محیط <span dir="ltr">SANDBOX</span> تست کنید.
 
 ---
 
 ## پرسش‌های پرتکرار
 
-* چرا درخواست پرداخت خطای اعتبارسنجی می‌دهد؟ بررسی کنید <span dir="ltr">merchant-id</span> و <span dir="ltr">callback-url</span> مقدار دارند و توضیح تراکنش خالی نیست.
-* چرا وریفای خطای <span dir="ltr">-54</span> می‌دهد؟ مقدار <span dir="ltr">authority</span> نامعتبر است یا اشتباه ارسال شده است.
+* چرا درخواست پرداخت خطای اعتبارسنجی می‌دهد؟ بررسی کنید <span dir="ltr">merchant-id</span> و <span dir="ltr">
+  callback-url</span> مقدار دارند و توضیح تراکنش خالی نیست.
+* چرا وریفای خطای <span dir="ltr">-54</span> می‌دهد؟ مقدار <span dir="ltr">authority</span> نامعتبر است یا اشتباه ارسال
+  شده است.
 * چرا ریورس خطای <span dir="ltr">-62</span> می‌دهد؟ آی‌پی سرور در پنل ثبت نشده است.
 * چرا پرداخت موفق بوده اما کد <span dir="ltr">101</span> می‌گیرم؟ تراکنش قبلا وریفای شده است.
-* چرا <span dir="ltr">referrer_id</span> اعمال نمی‌شود؟ ممکن است کد معرف معتبر نباشد یا شرایط ترمینال اجازه ثبت آن را ندهد.
+* چرا <span dir="ltr">referrer_id</span> اعمال نمی‌شود؟ ممکن است کد معرف معتبر نباشد یا شرایط ترمینال اجازه ثبت آن را
+  ندهد.
 
 </div>

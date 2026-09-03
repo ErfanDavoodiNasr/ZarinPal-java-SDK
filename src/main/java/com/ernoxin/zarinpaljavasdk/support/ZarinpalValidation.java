@@ -48,7 +48,7 @@ public class ZarinpalValidation {
      * Requires a value greater than or equal to {@code min}.
      *
      * @param value value to validate
-     * @param min minimum allowed value
+     * @param min   minimum allowed value
      * @param field logical field name used in error messages
      * @throws ZarinpalValidationException when value is below minimum
      */
@@ -78,7 +78,7 @@ public class ZarinpalValidation {
      * Requires a string length to be at most {@code max}.
      *
      * @param value value to validate, {@code null} is accepted
-     * @param max maximum length
+     * @param max   maximum length
      * @param field logical field name used in error messages
      * @throws ZarinpalValidationException when value length exceeds max
      */
@@ -91,7 +91,7 @@ public class ZarinpalValidation {
     /**
      * Requires an absolute HTTP or HTTPS URI.
      *
-     * @param uri URI value
+     * @param uri   URI value
      * @param field logical field name used in error messages
      * @throws ZarinpalValidationException when URI is missing or uses unsupported scheme
      */

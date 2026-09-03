@@ -36,6 +36,15 @@ import java.util.Set;
  *
  */
 public final class ZarinpalHttpClient {
+    private static final ResponseExtractor<ResponseEntity<String>> responseExtractor = response -> {
+        String responseBody = null;
+        try (InputStream stream = response.getBody()) {
+            if (stream != null) {
+                responseBody = StreamUtils.copyToString(stream, StandardCharsets.UTF_8);
+            }
+        }
+        return new ResponseEntity<>(responseBody, response.getHeaders(), response.getStatusCode());
+    };
     private final ZarinpalConfig config;
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
@@ -44,9 +53,9 @@ public final class ZarinpalHttpClient {
     /**
      * Creates an HTTP client using caller-provided dependencies.
      *
-     * @param config SDK config containing base URL, timeouts, retries, and user agent
+     * @param config       SDK config containing base URL, timeouts, retries, and user agent
      * @param restTemplate transport client implementation
-     * @param mapper JSON mapper used for request serialization and response parsing
+     * @param mapper       JSON mapper used for request serialization and response parsing
      */
     public ZarinpalHttpClient(ZarinpalConfig config, RestTemplate restTemplate, ObjectMapper mapper) {
         this.config = config;
@@ -72,6 +81,22 @@ public final class ZarinpalHttpClient {
         return new ZarinpalHttpClient(config, restTemplate, mapper);
     }
 
+    /**
+     * Executes a POST call and maps the response data section into {@code dataType}.
+     *
+     * <p>Retries are applied only to transport exceptions when retry is enabled in
+     * {@link ZarinpalConfig}. Logical API errors are not retried.
+     *
+     * @param path endpoint path relative to configured base URL
+     * @param request request payload object
+     * @param dataType target data type for {@code data} JSON object
+     * @param successCodes acceptable gateway codes in {@code data.code}
+     * @param <T> response type
+     * @return parsed and validated response data object
+     * @throws ZarinpalValidationException when request body serialization fails
+     * @throws ZarinpalTransportException when transport fails or no response is received
+     */
+
     private static void configureRestTemplate(RestTemplate restTemplate, ZarinpalConfig config) {
         ClientHttpRequestFactory requestFactory = restTemplate.getRequestFactory();
         if (requestFactory instanceof SimpleClientHttpRequestFactory simpleFactory) {
@@ -95,21 +120,29 @@ public final class ZarinpalHttpClient {
     }
 
     /**
-     * Executes a POST call and maps the response data section into {@code dataType}.
+     * Executes a non-retryable POST (mutating payment operations).
      *
-     * <p>Retries are applied only to transport exceptions when retry is enabled in
-     * {@link ZarinpalConfig}. Logical API errors are not retried.
-     *
-     * @param path endpoint path relative to configured base URL
-     * @param request request payload object
-     * @param dataType target data type for {@code data} JSON object
-     * @param successCodes acceptable gateway codes in {@code data.code}
-     * @param <T> response type
-     * @return parsed and validated response data object
-     * @throws ZarinpalValidationException when request body serialization fails
-     * @throws ZarinpalTransportException when transport fails or no response is received
+     * @see #post(String, Object, Class, Set, boolean)
      */
     public <T> T post(String path, Object request, Class<T> dataType, Set<Integer> successCodes) {
+        return post(path, request, dataType, successCodes, false);
+    }
+
+    /**
+     * Executes a POST call and maps the response data section into {@code dataType}.
+     *
+     * <p>Retries are applied only when {@code retryable} is {@code true} and retry is enabled in
+     * {@link ZarinpalConfig}. Mutating calls (request/verify/reverse) must pass {@code false}.
+     *
+     * @param path         endpoint path relative to configured base URL
+     * @param request      request payload object
+     * @param dataType     target data type for {@code data} JSON object
+     * @param successCodes acceptable gateway codes in {@code data.code}
+     * @param retryable    whether transport retries are allowed for this call
+     * @param <T>          response type
+     * @return parsed and validated response data object
+     */
+    public <T> T post(String path, Object request, Class<T> dataType, Set<Integer> successCodes, boolean retryable) {
         URI baseUrl = config.baseUrl();
         URI url = UriComponentsBuilder.fromUri(baseUrl).path(path).build().toUri();
         String body = writeBody(request);
@@ -117,8 +150,8 @@ public final class ZarinpalHttpClient {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.set(HttpHeaders.USER_AGENT, config.userAgent());
-        int attempts = config.retryEnabled() ? config.retryMaxAttempts() : 1;
-        long backoffMillis = config.retryEnabled() ? config.retryBackoff().toMillis() : 0;
+        int attempts = (retryable && config.retryEnabled()) ? config.retryMaxAttempts() : 1;
+        long backoffMillis = (retryable && config.retryEnabled()) ? config.retryBackoff().toMillis() : 0;
         RestClientException last = null;
         for (int attempt = 1; attempt <= attempts; attempt++) {
             ResponseEntity<String> response;
@@ -159,14 +192,4 @@ public final class ZarinpalHttpClient {
             throw new ZarinpalValidationException("Request body is invalid", ex);
         }
     }
-
-    private static final ResponseExtractor<ResponseEntity<String>> responseExtractor = response -> {
-        String responseBody = null;
-        try (InputStream stream = response.getBody()) {
-            if (stream != null) {
-                responseBody = StreamUtils.copyToString(stream, StandardCharsets.UTF_8);
-            }
-        }
-        return new ResponseEntity<>(responseBody, response.getHeaders(), response.getStatusCode());
-    };
 }

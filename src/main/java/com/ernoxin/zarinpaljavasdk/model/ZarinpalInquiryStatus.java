@@ -5,14 +5,24 @@ package com.ernoxin.zarinpaljavasdk.model;
  *
  */
 public enum ZarinpalInquiryStatus {
-    /** Transaction is verified successfully. */
+    /**
+     * Transaction is verified successfully.
+     */
     VERIFIED,
-    /** Transaction is paid but not fully verified in current flow. */
+    /**
+     * Transaction is paid but not fully verified in current flow.
+     */
     PAID,
-    /** Transaction is still in bank processing stage. */
+    /**
+     * Transaction is still in bank processing stage.
+     */
     IN_BANK,
-    /** Transaction failed. */
+    /**
+     * Transaction failed.
+     */
     FAILED,
-    /** Transaction has been reversed. */
+    /**
+     * Transaction has been reversed.
+     */
     REVERSED
 }

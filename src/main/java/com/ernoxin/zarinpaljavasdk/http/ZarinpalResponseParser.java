@@ -36,10 +36,10 @@ public final class ZarinpalResponseParser {
     /**
      * Parses response body and maps {@code data} node to target type.
      *
-     * @param response raw HTTP response
+     * @param response     raw HTTP response
      * @param successCodes accepted values of {@code data.code}
-     * @param dataType target mapped type
-     * @param <T> response type
+     * @param dataType     target mapped type
+     * @param <T>          response type
      * @return mapped data object
      * @throws ZarinpalApiException when body is invalid, contains errors, or code/status is unsuccessful
      */

@@ -5,8 +5,12 @@ package com.ernoxin.zarinpaljavasdk.model;
  *
  */
 public enum ZarinpalCurrency {
-    /** Iranian rial. */
+    /**
+     * Iranian rial.
+     */
     IRR,
-    /** Iranian toman. */
+    /**
+     * Iranian toman.
+     */
     IRT
 }

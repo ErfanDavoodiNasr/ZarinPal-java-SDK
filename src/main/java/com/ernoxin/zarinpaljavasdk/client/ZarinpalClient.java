@@ -64,7 +64,7 @@ public final class ZarinpalClient {
     /**
      * Creates a client with a custom HTTP client.
      *
-     * @param config validated SDK configuration
+     * @param config     validated SDK configuration
      * @param httpClient HTTP client implementation
      * @throws ZarinpalValidationException when any argument is {@code null}
      */
@@ -151,7 +151,7 @@ public final class ZarinpalClient {
      */
     public UnverifiedResult unverifiedPayments() {
         UnverifiedPayload payload = new UnverifiedPayload(config.merchantId());
-        return httpClient.post(ZarinpalEndpoints.unverified(config.operationVersion()), payload, UnverifiedResult.class, Set.of(100));
+        return httpClient.post(ZarinpalEndpoints.unverified(config.operationVersion()), payload, UnverifiedResult.class, Set.of(100), true);
     }
 
     /**
@@ -167,7 +167,7 @@ public final class ZarinpalClient {
         }
         ZarinpalValidation.requireAuthority(request.authority());
         InquiryPayload payload = new InquiryPayload(config.merchantId(), request.authority());
-        return httpClient.post(ZarinpalEndpoints.inquiry(config.operationVersion()), payload, InquiryResult.class, Set.of(100));
+        return httpClient.post(ZarinpalEndpoints.inquiry(config.operationVersion()), payload, InquiryResult.class, Set.of(100), true);
     }
 
     /**
@@ -183,7 +183,7 @@ public final class ZarinpalClient {
         }
         validateFeeCalculationRequest(request);
         FeeCalculationPayload payload = new FeeCalculationPayload(config.merchantId(), request.amount(), request.currency());
-        return httpClient.post(ZarinpalEndpoints.feeCalculation(config.operationVersion()), payload, FeeCalculationResult.class, Set.of(100));
+        return httpClient.post(ZarinpalEndpoints.feeCalculation(config.operationVersion()), payload, FeeCalculationResult.class, Set.of(100), true);
     }
 
     /**
@@ -205,6 +205,11 @@ public final class ZarinpalClient {
 
     /**
      * Parses callback query parameters from a flat map.
+     *
+     * <p><strong>Security:</strong> this only parses gateway redirect parameters. It does
+     * <em>not</em> authenticate the callback. Always call {@link #verifyPayment(VerifyRequest)}
+     * for successful callbacks, and compare amount/order identity with your own persisted order
+     * before fulfilling.
      *
      * <p>Parameter names are matched case-insensitively for {@code Authority}
      * and {@code Status}. Valid status values are {@code OK} and {@code NOK}.

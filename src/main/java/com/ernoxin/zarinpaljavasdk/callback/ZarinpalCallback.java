@@ -4,7 +4,7 @@ package com.ernoxin.zarinpaljavasdk.callback;
  * Parsed callback payload extracted from query parameters.
  *
  * @param authority payment authority identifier
- * @param status callback status
+ * @param status    callback status
  */
 public record ZarinpalCallback(String authority, ZarinpalCallbackStatus status) {
 

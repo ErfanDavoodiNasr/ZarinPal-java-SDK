@@ -4,6 +4,7 @@ import com.ernoxin.zarinpaljavasdk.client.ZarinpalClient;
 import com.ernoxin.zarinpaljavasdk.http.ZarinpalHttpClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -13,8 +14,11 @@ import org.springframework.context.annotation.Bean;
  * <p>Creates {@link ZarinpalConfig}, {@link ZarinpalHttpClient}, and
  * {@link ZarinpalClient} when no user-defined beans of the same type exist.
  *
+ * <p>Opt-in: set {@code zarinpal.enabled=true}. Without that flag, no beans are registered
+ * so adding this dependency alone cannot fail application startup.
  */
 @AutoConfiguration
+@ConditionalOnProperty(prefix = "zarinpal", name = "enabled", havingValue = "true")
 @EnableConfigurationProperties(ZarinpalProperties.class)
 public class ZarinpalAutoConfiguration {
 
@@ -45,7 +49,7 @@ public class ZarinpalAutoConfiguration {
     /**
      * Creates the high-level SDK client.
      *
-     * @param config validated SDK config
+     * @param config     validated SDK config
      * @param httpClient HTTP transport implementation
      * @return reusable SDK client bean
      */

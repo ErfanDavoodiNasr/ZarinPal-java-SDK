@@ -19,7 +19,7 @@ public class ZarinpalException extends RuntimeException {
      * Creates a new exception with message and cause.
      *
      * @param message error description
-     * @param cause root cause
+     * @param cause   root cause
      */
     public ZarinpalException(String message, Throwable cause) {
         super(message, cause);

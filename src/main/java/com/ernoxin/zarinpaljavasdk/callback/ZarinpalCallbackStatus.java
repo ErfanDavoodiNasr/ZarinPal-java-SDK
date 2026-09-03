@@ -5,8 +5,12 @@ package com.ernoxin.zarinpaljavasdk.callback;
  *
  */
 public enum ZarinpalCallbackStatus {
-    /** Payment was accepted and is eligible for verification. */
+    /**
+     * Payment was accepted and is eligible for verification.
+     */
     OK,
-    /** Payment was canceled or failed before verification. */
+    /**
+     * Payment was canceled or failed before verification.
+     */
     NOK
 }

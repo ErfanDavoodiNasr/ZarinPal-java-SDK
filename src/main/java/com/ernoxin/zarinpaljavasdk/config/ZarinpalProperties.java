@@ -20,27 +20,54 @@ import java.time.Duration;
 @Getter
 @ConfigurationProperties(prefix = "zarinpal")
 public class ZarinpalProperties {
-    /** Merchant UUID assigned by Zarinpal. */
+    /**
+     * Must be {@code true} to register SDK beans via auto-configuration.
+     * Defaults to {@code false} so the dependency alone does not start beans.
+     */
+    private boolean enabled = false;
+    /**
+     * Merchant UUID assigned by Zarinpal.
+     */
     private String merchantId;
-    /** Default callback URL used by payment requests without request-level callback URL. */
+    /**
+     * Default callback URL used by payment requests without request-level callback URL.
+     */
     private URI callbackUrl;
-    /** Runtime environment; defaults to production. */
+    /**
+     * Runtime environment; defaults to production.
+     */
     private ZarinpalEnvironment environment = ZarinpalEnvironment.PRODUCTION;
-    /** Base URL overrides. */
+    /**
+     * Base URL overrides.
+     */
     private BaseUrl baseUrl = new BaseUrl();
-    /** Operation version segment, default is {@code v4}. */
+    /**
+     * Operation version segment, default is {@code v4}.
+     */
     private String operationVersion = ZarinpalConfig.DEFAULT_OPERATION_VERSION;
-    /** Connect/read timeout values. */
+    /**
+     * Connect/read timeout values.
+     */
     private Timeout timeout = new Timeout();
-    /** Transport retry options. */
+    /**
+     * Transport retry options.
+     */
     private Retry retry = new Retry();
-    /** HTTP options such as {@code User-Agent}. */
+    /**
+     * HTTP options such as {@code User-Agent}.
+     */
     private Http http = new Http();
-    /** Maximum amount allowed for toman requests ({@code IRT}). */
+    /**
+     * Maximum amount allowed for toman requests ({@code IRT}).
+     */
     private long maxAmountIrt = ZarinpalConfig.DEFAULT_MAX_AMOUNT_IRT;
-    /** Maximum amount allowed for rial requests ({@code IRR}). */
+    /**
+     * Maximum amount allowed for rial requests ({@code IRR}).
+     */
     private long maxAmountIrr = ZarinpalConfig.DEFAULT_MAX_AMOUNT_IRR;
-    /** Minimum amount allowed for each wage entry. */
+    /**
+     * Minimum amount allowed for each wage entry.
+     */
     private long minWageAmount = ZarinpalConfig.DEFAULT_MIN_WAGE_AMOUNT;
 
     /**
@@ -78,9 +105,13 @@ public class ZarinpalProperties {
     @Setter
     @Getter
     public static class BaseUrl {
-        /** Production base URL override. */
+        /**
+         * Production base URL override.
+         */
         private URI production = ZarinpalConfig.DEFAULT_BASE_URL_PRODUCTION;
-        /** Sandbox base URL override. */
+        /**
+         * Sandbox base URL override.
+         */
         private URI sandbox = ZarinpalConfig.DEFAULT_BASE_URL_SANDBOX;
     }
 
@@ -90,9 +121,13 @@ public class ZarinpalProperties {
     @Setter
     @Getter
     public static class Timeout {
-        /** Connection establishment timeout. */
+        /**
+         * Connection establishment timeout.
+         */
         private Duration connect = ZarinpalConfig.DEFAULT_CONNECT_TIMEOUT;
-        /** Response read timeout after connection is established. */
+        /**
+         * Response read timeout after connection is established.
+         */
         private Duration read = ZarinpalConfig.DEFAULT_READ_TIMEOUT;
     }
 
@@ -102,11 +137,17 @@ public class ZarinpalProperties {
     @Setter
     @Getter
     public static class Retry {
-        /** Enables retry on transport-level failures. */
+        /**
+         * Enables retry on transport-level failures.
+         */
         private boolean enabled = ZarinpalConfig.DEFAULT_RETRY_ENABLED;
-        /** Total number of attempts when retry is enabled. */
+        /**
+         * Total number of attempts when retry is enabled.
+         */
         private int maxAttempts = ZarinpalConfig.DEFAULT_RETRY_MAX_ATTEMPTS;
-        /** Fixed backoff between attempts. */
+        /**
+         * Fixed backoff between attempts.
+         */
         private Duration backoff = ZarinpalConfig.DEFAULT_RETRY_BACKOFF;
     }
 
@@ -116,7 +157,9 @@ public class ZarinpalProperties {
     @Setter
     @Getter
     public static class Http {
-        /** Value used for the outbound {@code User-Agent} header. */
+        /**
+         * Value used for the outbound {@code User-Agent} header.
+         */
         private String userAgent = ZarinpalConfig.DEFAULT_USER_AGENT;
     }
 }

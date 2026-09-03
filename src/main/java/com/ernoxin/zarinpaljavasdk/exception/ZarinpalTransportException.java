@@ -10,7 +10,7 @@ public class ZarinpalTransportException extends ZarinpalException {
      * Creates a transport exception with cause.
      *
      * @param message transport failure detail
-     * @param cause root cause
+     * @param cause   root cause
      */
     public ZarinpalTransportException(String message, Throwable cause) {
         super(message, cause);
